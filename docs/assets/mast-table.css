@@ -1,0 +1,22 @@
+a {
+    color: #3e8ede !important;
+}
+
+div.prev-next-area > a.left-prev > div.prev-next-info > p.prev-next-title {
+    color: #3e8ede !important;
+}
+
+div.prev-next-area > a.right-next > div.prev-next-info > p.prev-next-title {
+    color: #3e8ede !important;
+}
+
+p.title.logo__title {
+    font-size: 1.2em !important;
+    color: #3e8ede !important;
+}
+
+/* p.title.logo__title > span#mast {} */
+
+p.title.logo__title > span#app { 
+    font-weight: 550 !important;
+}

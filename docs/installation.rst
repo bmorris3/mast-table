@@ -1,5 +1,5 @@
-User Installation
------------------
+Installation
+============
 
 .. note::
 
