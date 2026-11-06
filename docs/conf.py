@@ -35,6 +35,11 @@ intersphinx_mapping = {
     'astropy': ('https://docs.astropy.org/en/stable/', None),
     'astroquery': ('https://astroquery.readthedocs.io/en/stable/', None),
     'mast-aladin': ('https://mast-aladin.readthedocs.io/en/latest/', None),
+    'ipyvuetify': ('https://ipyvuetify.readthedocs.io/en/latest', None),
+    # 'solara': ('https://solara.dev/documentation/api', None),
+    # 'reacton': ('https://reacton.solara.dev/en/latest/', None),
+    'traitlets': ('https://traitlets.readthedocs.io/en/stable/', None),
+
 }
 
 # Add any Sphinx extension module names here, as strings. They can be

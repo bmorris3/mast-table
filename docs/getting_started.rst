@@ -1,18 +1,31 @@
-Getting started
----------------
+.. |jwst_search| raw:: html
 
-Query MAST
-^^^^^^^^^^
+   <a href="https://mast.stsci.edu/search/ui/#/jwst" target="_blank">JWST Search</a>
+
+.. |jwst_search_result| raw:: html
+
+   <a href="https://mast.stsci.edu/search/ui/#/jwst/results?resolve=true&target=9.701+40.76&radius=8"
+   target="_blank">Follow this link to see results for the above query</a>
+
+
+Getting started
+===============
 
 In this example, we'll query MAST for JWST observations of a stellar merger
-event. Let's use astroquery to search for JWST observations with 
-`astroquery.mast.missions.MastMissionsClass`:
+event. 
+
+Query MAST
+----------
+
+Let's use `astroquery <https://astroquery.readthedocs.io/en/latest/>`_ to
+search for JWST observations with `~astroquery.mast.missions.MastMissionsClass`:
 
 .. code-block:: python
 
     from astroquery.mast import MastMissions
+
     import astropy.units as u
-    from astropy.coordinates import SkyCoord
+    from astropy.coordinates import SkyCoord    
 
     coord = SkyCoord(ra=9.701, dec=40.76, unit=u.deg)
 
@@ -23,23 +36,26 @@ event. Let's use astroquery to search for JWST observations with
     )
 
 
-.. admonition:: Alternative: search via webform
+.. admonition:: Non-python alternative: JWST Search via webform
    :class: tip
 
-   To query MAST in your web browser, use
-   `JWST Search <https://mast.stsci.edu/search/ui/#/jwst>`_.
+   To query MAST in your web browser, use |jwst_search|.
    JWST Search will display query results as a table, and plot 
    the observation footprints on the Aladin full-sky atlas. 
-   `Follow this link to see results for the above query 
-   <https://mast.stsci.edu/search/ui/#/jwst/results?resolve=true&target=9.701+40.76&radius=8>`_.
+   |jwst_search_result|.
 
-
+   .. image:: assets/getting_started_images/jwst-query-result.jpg
+       :target: https://mast.stsci.edu/search/ui/#/jwst/results?resolve=true&target=9.701+40.76&radius=8
+       :width: 100%
+       :align: center
+       :class: outlined
+    
 
 Astroquery returns a `astropy.table.Table` object with the MAST query results.
 We can interact with the results using ``mast-table``.
 
 Launch mast-table
-^^^^^^^^^^^^^^^^^
+-----------------
 
 Initialize the `~mast_table.mast_table.MastTable` widget with:
 
@@ -51,5 +67,80 @@ Initialize the `~mast_table.mast_table.MastTable` widget with:
 
     mast_table.show()
 
+
+.. image:: assets/getting_started_images/cell0.png
+    :width: 100%
+    :align: center
+    :class: no-click
+
+|
+
 By default, `~mast_table.mast_table.MastTable.show` will display the 
 widget in the cell output below the code cell.
+
+The table footer tells us that the results are paginated with 10 items per page,
+and 67 observations total (see table footer). Click the arrows on the right
+of the table footer to advance through the pages.
+
+Browse results
+--------------
+
+Hover over column names to see their descriptions. Click the arrow
+next to a column name to sort the table by that column's values in
+ascending or descending order:
+
+.. image:: assets/getting_started_images/cell0-desc.png
+    :width: 100%
+    :align: center
+    :class: no-click
+
+
+
+Selection
+---------
+
+Click the checkboxes on the left of a row to select an observation:
+
+.. image:: assets/getting_started_images/cell0-selected.png
+    :width: 100%
+    :align: center
+    :class: no-click
+
+|
+
+
+Filters
+-------
+
+Use the "Filters" button in the top left to filter down the visible
+observations to those that meet some criteria. Let's make visible *only* the
+observations with the exposure type (``exp_type``) column value corresponding
+to MIRI imaging (``MIR_IMAGE``):
+
+.. image:: assets/getting_started_images/cell0-filter.png
+    :width: 100%
+    :align: center
+    :class: no-click
+
+|
+
+Multiple filters can be used together to narrow down the observations further:
+
+.. image:: assets/getting_started_images/cell0-filter-multi.png
+    :width: 100%
+    :align: center
+    :class: no-click
+
+| 
+
+Combine filters with the logical operators "AND" or "OR" using the buttons
+at the top, or click the circular arrow to clear all filters:
+
+.. image:: assets/getting_started_images/cell0-filter-multi.png
+    :width: 100%
+    :align: center
+    :class: no-click
+
+| 
+
+
