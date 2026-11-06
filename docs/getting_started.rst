@@ -44,7 +44,7 @@ search for JWST observations with `~astroquery.mast.missions.MastMissionsClass`:
    the observation footprints on the Aladin full-sky atlas. 
    |jwst_search_result|.
 
-   .. image:: assets/getting_started_images/jwst-query-result.jpg
+   .. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/jwst-query-result.jpg?raw=true
        :target: https://mast.stsci.edu/search/ui/#/jwst/results?resolve=true&target=9.701+40.76&radius=8
        :width: 100%
        :align: center
@@ -68,7 +68,7 @@ Initialize the `~mast_table.mast_table.MastTable` widget with:
     mast_table.show()
 
 
-.. image:: assets/getting_started_images/cell0.png
+.. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/cell0.png?raw=true
     :width: 100%
     :align: center
     :class: no-click
@@ -77,6 +77,9 @@ Initialize the `~mast_table.mast_table.MastTable` widget with:
 
 By default, `~mast_table.mast_table.MastTable.show` will display the 
 widget in the cell output below the code cell.
+
+Pagination
+~~~~~~~~~~
 
 The table footer tells us that the results are paginated with 10 items per page,
 and 67 observations total (see table footer). Click the arrows on the right
@@ -89,7 +92,7 @@ Hover over column names to see their descriptions. Click the arrow
 next to a column name to sort the table by that column's values in
 ascending or descending order:
 
-.. image:: assets/getting_started_images/cell0-desc.png
+.. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/cell0-desc.png?raw=true
     :width: 100%
     :align: center
     :class: no-click
@@ -101,7 +104,7 @@ Selection
 
 Click the checkboxes on the left of a row to select an observation:
 
-.. image:: assets/getting_started_images/cell0-selected.png
+.. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/cell0-selected.png?raw=true
     :width: 100%
     :align: center
     :class: no-click
@@ -117,26 +120,32 @@ observations to those that meet some criteria. Let's make visible *only* the
 observations with the exposure type (``exp_type``) column value corresponding
 to MIRI imaging (``MIR_IMAGE``):
 
-.. image:: assets/getting_started_images/cell0-filter.png
+.. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/cell0-filter.png?raw=true
     :width: 100%
     :align: center
     :class: no-click
 
 |
 
+Multiple filters
+~~~~~~~~~~~~~~~~
+
 Multiple filters can be used together to narrow down the observations further:
 
-.. image:: assets/getting_started_images/cell0-filter-multi.png
+.. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/cell0-filter-multi.png?raw=true
     :width: 100%
     :align: center
     :class: no-click
 
 | 
 
+Filter logic
+~~~~~~~~~~~~
+
 Combine filters with the logical operators "AND" or "OR" using the buttons
 at the top, or click the circular arrow to clear all filters:
 
-.. image:: assets/getting_started_images/cell0-filter-multi.png
+.. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/cell0-filter-operators.png?raw=true
     :width: 100%
     :align: center
     :class: no-click
