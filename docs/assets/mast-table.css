@@ -20,3 +20,9 @@ p.title.logo__title {
 p.title.logo__title > span#app { 
     font-weight: 550 !important;
 }
+
+.navbar-brand {
+    img {
+        max-height: 1.8em !important;
+    }
+}
