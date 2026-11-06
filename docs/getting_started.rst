@@ -44,7 +44,7 @@ search for JWST observations with `~astroquery.mast.missions.MastMissionsClass`:
    the observation footprints on the Aladin full-sky atlas. 
    |jwst_search_result|.
 
-   .. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/jwst-query-result.jpg?raw=true
+   .. image:: https://github.com/spacetelescope/widget-docs/blob/main/mast-table/getting_started/jwst-query-result.jpg?raw=true
        :target: https://mast.stsci.edu/search/ui/#/jwst/results?resolve=true&target=9.701+40.76&radius=8
        :width: 100%
        :align: center
@@ -68,7 +68,7 @@ Initialize the `~mast_table.mast_table.MastTable` widget with:
     mast_table.show()
 
 
-.. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/cell0.png?raw=true
+.. image:: https://github.com/spacetelescope/widget-docs/blob/main/mast-table/getting_started/cell0.png?raw=true
     :width: 100%
     :align: center
     :class: no-click
@@ -92,7 +92,7 @@ Hover over column names to see their descriptions. Click the arrow
 next to a column name to sort the table by that column's values in
 ascending or descending order:
 
-.. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/cell0-desc.png?raw=true
+.. image:: https://github.com/spacetelescope/widget-docs/blob/main/mast-table/getting_started/cell0-desc.png?raw=true
     :width: 100%
     :align: center
     :class: no-click
@@ -104,7 +104,7 @@ Selection
 
 Click the checkboxes on the left of a row to select an observation:
 
-.. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/cell0-selected.png?raw=true
+.. image:: https://github.com/spacetelescope/widget-docs/blob/main/mast-table/getting_started/cell0-selected.png?raw=true
     :width: 100%
     :align: center
     :class: no-click
@@ -120,7 +120,7 @@ observations to those that meet some criteria. Let's make visible *only* the
 observations with the exposure type (``exp_type``) column value corresponding
 to MIRI imaging (``MIR_IMAGE``):
 
-.. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/cell0-filter.png?raw=true
+.. image:: https://github.com/spacetelescope/widget-docs/blob/main/mast-table/getting_started/cell0-filter.png?raw=true
     :width: 100%
     :align: center
     :class: no-click
@@ -132,7 +132,7 @@ Multiple filters
 
 Multiple filters can be used together to narrow down the observations further:
 
-.. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/cell0-filter-multi.png?raw=true
+.. image:: https://github.com/spacetelescope/widget-docs/blob/main/mast-table/getting_started/cell0-filter-multi.png?raw=true
     :width: 100%
     :align: center
     :class: no-click
@@ -145,7 +145,7 @@ Filter logic
 Combine filters with the logical operators "AND" or "OR" using the buttons
 at the top, or click the circular arrow to clear all filters:
 
-.. image:: https://github.com/spacetelescope/mast-table/blob/docs-images/getting_started_images/cell0-filter-operators.png?raw=true
+.. image:: https://github.com/spacetelescope/widget-docs/blob/main/mast-table/getting_started/cell0-filter-operators.png?raw=true
     :width: 100%
     :align: center
     :class: no-click

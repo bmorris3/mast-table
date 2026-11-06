@@ -14,7 +14,6 @@ from typing import List, Optional, Callable
 import solara
 
 
-
 # register loaded table widgets as they're initialized
 _table_widgets = []
 
@@ -27,16 +26,7 @@ __all__ = [
 
 class MastTable:
     """
-    A selectable table that participates in cross-filtering.
-
-    Parameters
-    ----------
-    table : `~astropy.table.Table`
-        A table to load.
-
-    **kwargs
-        Keyword arguments are passed to BaseMastTable.
-
+    A selectable table with row filtering.
     """
 
     def __init__(self, table, **kwargs):
@@ -48,7 +38,7 @@ class MastTable:
 
         **kwargs
             Keyword arguments are passed to `~mast_table.base.BaseMastTable` and
-            `~mast_table.components.components.MastTableView`.
+            `~mast_table.components.MastTableView`.
         """
         _table_widgets.append(self)
 
@@ -123,14 +113,14 @@ class MastTable:
             The title of the sidecar tab, only applicable to a "sidecar" display.
 
         ref : sidecar.Sidecar [1]_ or app, optional. Default None.
-            An existing reference sidecar or app with `.sidecar` attribute. Opens the new sidecar
+            An existing reference sidecar or app with ``.sidecar`` attribute. Opens the new sidecar
             display with its anchor defined relative to the ref sidecar. Only applicable to a
             "sidecar" display.
 
         References
         ----------
         .. [1] `JupyterLab Sidecar
-               <https://github.com/jupyter-widgets/jupyterlab-sidecar#sidecar>`_.
+               <https://github.com/jupyter-widgets/jupyterlab-sidecar#sidecar>`_
         """
         valid_anchors = [
             "split-right", "split-left", "split-top", "split-bottom",
@@ -223,7 +213,7 @@ def SelectableTable(
     table : `~astropy.table.Table`
         A table to load.
 
-    base_mast_table : `BaseMastTable`
+    base_mast_table : `~mast_table.base.BaseMastTable`
         BaseMastTable widget to display.
 
     on_selected_indices : callable (optional, default is `None)

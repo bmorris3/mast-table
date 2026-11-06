@@ -7,4 +7,3 @@ Full API
 .. automodapi:: mast_table.base
 
 .. automodapi:: mast_table.components
-

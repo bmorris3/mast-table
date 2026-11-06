@@ -30,19 +30,36 @@ __all__ = [
 ]
 
 
+def preserve_docstring(func):
+    # when a function is decorated with `solara.component`,
+    # the function's docstring is not passed through to the
+    # wrapped function unless you also use this decorator.
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+@preserve_docstring
 @solara.component
 def FilterModeButtons(
     mode,
     set_mode,
     dense=False
 ):
-    """Comparison operator selector for slider widgets.
+    """
+    Comparison operator selector for slider widgets.
 
     Parameters
     ----------
-    - `mode`: The astropy Table to filter.
-    - `set_mode`: Callback for updating filter's mask.
-    - `dense`: Boolean to condense button options.
+    mode : str
+        The mode to use for filtering. Can be one of `==`, `>=`, `<=`, `>`, `<`.
+    set_mode : callable
+        Callback for updating filter's mask.
+    dense : bool
+        Boolean to condense button options.
 
     """
     with solara.ToggleButtonsSingle(
@@ -82,6 +99,7 @@ def FilterModeButtons(
         )
 
 
+@preserve_docstring
 @solara.component
 def SettingsMenu(
     invert,
@@ -89,14 +107,19 @@ def SettingsMenu(
     multiple=None,
     set_multiple=None
 ):
-    """A menu for widgets that manages options for mode, inversion, and multiple.
+    """
+    A menu for widgets that manages options for mode, inversion, and multiple.
 
     Parameters
     ----------
-    - `invert`: Whether to invert the selection.
-    - `set_invert`: Callback for updating filter's inversion.
-    - `multiple`: Whether to allow multiple values to be selected.
-    - `set_multiple`: Callback for updating filter's ability to select multiple values.
+    invert : bool
+        Whether to invert the selection.
+    set_invert : callable
+        Callback for updating filter's inversion.
+    multiple : bool
+        Whether to allow multiple values to be selected.
+    set_multiple : callable
+        Callback for updating filter's ability to select multiple values.
 
     """
     with v.Container(
@@ -123,17 +146,21 @@ def SettingsMenu(
             )
 
 
+@preserve_docstring
 @solara.component
 def RemoveFilterButton(
     filter_id: str,
     on_remove=None,
 ):
-    """Button for removal of filter.
+    """
+    Button for removal of filter.
 
     Parameters
     ----------
-    - `filter_id`: The unique filter instance ID.
-    - `on_remove`: Callback to remove this filter from parent filter list.
+    filter_id : str
+        The unique filter instance ID.
+    on_remove : callable, optional
+        Callback to remove this filter from parent filter list.
 
     """
     solara.Button(
@@ -154,6 +181,7 @@ def RemoveFilterButton(
     )
 
 
+@preserve_docstring
 @solara.component
 def CrossFilterSelect(
     table: Table,
@@ -166,24 +194,38 @@ def CrossFilterSelect(
     max_unique: int = 100,
     multiple: bool = False,
     invert: bool = False,
-    mode: str = "==",
     configurable: bool = True,
     classes: List[str] = [],
 ):
-    """A Select widget that will cross filter an astropy Table.
+    """
+    A Select widget that will cross filter an astropy Table.
 
     Parameters
     ----------
-    - `table`: The astropy Table to filter.
-    - `column`: The column to filter on.
-    - `filter_id`: The unique filter instance ID.
-    - `set_mask`: Callback for updating filter's mask.
-    - `initial_values`: The initial values to set as selected.
-    - `max_unique`: The maximum number of unique values to show in the dropdown.
-    - `multiple`: Whether to allow multiple values to be selected.
-    - `invert`: Whether to invert the selection.
-    - `configurable`: Whether to show the configuration button.
-    - `classes`: Additional CSS classes to add to the main widget.
+    table : `astropy.table.Table`
+        The astropy Table to filter.
+    column : str
+        The column to filter on.
+    filter_id : str
+        The unique filter instance ID.
+    set_mask : callable
+        Callback for updating filter's mask.
+    set_filter_mode : callable
+        Callback for updating filter mode
+    table_filtered : `astropy.table.Table`
+        Table after filtering.
+    initial_values : list, optional
+        The initial values to set as selected. Default is None.
+    max_unique : int, optional
+        The maximum number of unique values to show in the dropdown. Default is 100.
+    multiple : bool
+        Whether to allow multiple values to be selected. Default is False.
+    invert : bool
+        Whether to invert the selection. Default is False.
+    configurable : bool
+        Whether to show the configuration button. Default is True.
+    classes : list
+        Additional CSS classes to add to the main widget.
 
     """
     if initial_values is None:
@@ -369,6 +411,7 @@ def CrossFilterSelect(
     return main
 
 
+@preserve_docstring
 @solara.component
 def CrossFilterSlider(
     table,
@@ -380,21 +423,29 @@ def CrossFilterSlider(
     mode: str = ">=",
     configurable: bool = True,
 ):
-    """A Slider widget that will cross filter an astropy Table.
+    """
+    A Slider widget that will cross filter an astropy Table.
 
-    See [use_cross_filter](/documentation/api/hooks/use_cross_filter)
-    for more information about how to use cross filtering.
+    See ``use_cross_filter`` for more information about how to use cross filtering.
 
     Parameters
     ----------
-    - `table`: The astropy Table to filter.
-    - `column`: The column to filter on.
-    - `filter_id`: The unique filter instance ID.
-    - `set_mask`: Callback for updating filter's mask.
-    - `set_filter_mode`: Callback for updating filter's mode.
-    - `initial_value`: The initial value to set for the slider.
-    - `mode`: The mode to use for filtering. Can be one of `==`, `>=`, `<=`, `>`, `<`.
-    - `configurable`: Whether to show a configuration button.
+    table : 
+        The astropy Table to filter.
+    column : 
+        The column to filter on.
+    filter_id : 
+        The unique filter instance ID.
+    set_mask : 
+        Callback for updating filter's mask.
+    set_filter_mode : 
+        Callback for updating filter's mode.
+    initial_value : 
+        The initial value to set for the slider.
+    mode : str
+        The mode to use for filtering. Can be one of `==`, `>=`, `<=`, `>`, `<`.
+    configurable : 
+        Whether to show a configuration button.
 
     """
     filter_value, set_filter_value = solara.use_state(initial_value)
@@ -475,26 +526,22 @@ def CrossFilterSlider(
     return main
 
 
+@preserve_docstring
 @solara.component
 def MastTableView(table, base_mast_table, on_popout_button=None):
-    """Displays selectable table that participates in cross-filtering.
-
-    * Incoming cross-filters from other components narrow which rows
-      are shown.
-    * When the user checks rows, a filter is set so that *other*
-      cross-filter consumers only see the selected rows.
-    * Filters are set and tracked in a popout window.
+    """
+    Displays selectable table with cross-filtering.
 
     Parameters
     ----------
     table : `~astropy.table.Table`
         A table to load.
 
-    base_mast_table : `BaseMastTable`
+    base_mast_table : `~mast_table.base.BaseMastTable`
         BaseMastTable widget to display.
 
-    on_popout_button: callable (optional, default is `None`)
-        Callback to expose popout button.
+    on_popout_button: callable, optional
+        Callback to expose popout button. Default is None.
 
     """
     solara.provide_cross_filter()
