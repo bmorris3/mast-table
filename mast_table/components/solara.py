@@ -430,22 +430,22 @@ def CrossFilterSlider(
 
     Parameters
     ----------
-    table : 
+    table : `astropy.table.Table`
         The astropy Table to filter.
-    column : 
+    column : str
         The column to filter on.
-    filter_id : 
+    filter_id : str
         The unique filter instance ID.
-    set_mask : 
+    set_mask : callable
         Callback for updating filter's mask.
-    set_filter_mode : 
+    set_filter_mode : callable
         Callback for updating filter's mode.
-    initial_value : 
+    initial_value : float, optional
         The initial value to set for the slider.
-    mode : str
+    mode : str, optional
         The mode to use for filtering. Can be one of `==`, `>=`, `<=`, `>`, `<`.
-    configurable : 
-        Whether to show a configuration button.
+    configurable : bool
+        Whether to show a configuration button. Default is True.
 
     """
     filter_value, set_filter_value = solara.use_state(initial_value)
