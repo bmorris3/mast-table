@@ -1,23 +1,17 @@
 import functools
-import operator
-import uuid
 from typing import List, Callable
 
-from ipypopout import PopoutButton
 import reacton.ipyvuetify as v
 import solara
 
 from astropy.table import Table
 from mast_table.utils import (
     operator_map, table_filter_values, table_range,
-    slide_or_select, step_size, build_select_items,
-    build_select_filter_preview,
+    step_size, build_select_filter_preview,
 )
 
-from mast_table.base import col_unique_row_index
 from mast_table.components.cross_filter_select import Select
 from mast_table.components.cross_filter_input import Input
-from mast_table.components.alert import Alert
 
 
 __all__ = [

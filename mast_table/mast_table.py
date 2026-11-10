@@ -1,17 +1,28 @@
+import functools
+import operator
+import uuid
 import warnings
-
-
-from IPython.display import display
-from sidecar import Sidecar
-import ipywidgets as widgets
-
-from mast_table.base import BaseMastTable, col_unique_row_index
-from mast_table.components import MastTableView
-from mast_table.components.solara import preserve_docstring
 
 from typing import List, Optional, Callable
 
+from IPython.display import display
+import ipywidgets as widgets
+from ipypopout import PopoutButton
+from sidecar import Sidecar
 import solara
+import reacton.ipyvuetify as v
+
+from mast_table.base import BaseMastTable, col_unique_row_index
+from mast_table.components.solara import preserve_docstring
+from mast_table.components import (
+    Alert, Input, Select, RemoveFilterButton, CrossFilterSlider,
+    CrossFilterSelect, FilterModeButtons
+)
+from mast_table.utils import (
+    operator_map, table_range,
+    slide_or_select, step_size, build_select_items,
+    build_select_filter_preview,
+)
 
 
 # register loaded table widgets as they're initialized
@@ -271,6 +282,7 @@ def SelectableTable(
     )
 
     display(base_mast_table)
+
 
 @preserve_docstring
 @solara.component
