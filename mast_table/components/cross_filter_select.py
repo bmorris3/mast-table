@@ -10,20 +10,20 @@ class Select(VuetifyTemplate):
     Parameters
     ----------
     value : `traitlets.Any`
-        Selected value
+        Selected value.
     label : `traitlets.Unicode`
-        Text label
+        Text label.
     clearable : `traitlets.Bool`
-        True if the selection can be cleared
+        True if the selection can be cleared.
     return_object : `traitlets.Bool`
-        True if the object will be returned
+        True if the object will be returned.
     items : `traitlets.List`
-        List of selectable items in the Select component
+        List of selectable items in the Select component.
     filtered : `traitlets.Bool`
-        True if ``items`` is filtered
+        True if ``items`` is filtered.
     count : `traitlets.Int`
     multiple : `traitlets.Bool`
-        Allow multiselect
+        Allow multiselect.
     messages : `traitlets.Unicode`
     search : `traitlets.Any`
 
