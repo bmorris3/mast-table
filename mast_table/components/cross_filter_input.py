@@ -11,9 +11,9 @@ class Input(VuetifyTemplate):
     value : `traitlets.Any`
         Value of the input.
     min : `traitlets.Float`
-        Smallest value
+        Smallest allowed value.
     max : `traitlets.Float`
-        Largest value
+        Largest allowed value.
     step : `traitlets.Float`
         Incremements between ``min`` and ``max``.
     """

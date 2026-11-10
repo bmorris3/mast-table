@@ -12,7 +12,7 @@ Getting started
 ===============
 
 In this example, we'll query MAST for JWST observations of a stellar merger
-event. 
+event and explore the data using `mast-table`.
 
 Query MAST
 ----------

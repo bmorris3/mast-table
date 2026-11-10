@@ -9,9 +9,9 @@ class Alert(VuetifyTemplate):
     Parameters
     ----------
     text : `traitlets.Any`
-        Text content of the alert
+        Text content of the alert.
     icon : `traitlets.Any`
-        Icon to accompany the alert
+        Icon to accompany the alert.
     """
 
     template_file = __file__, "alert.vue"
