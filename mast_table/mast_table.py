@@ -216,14 +216,14 @@ def SelectableTable(
     base_mast_table : `~mast_table.base.BaseMastTable`
         BaseMastTable widget to display.
 
-    on_selected_indices : callable (optional, default is `None)
+    on_selected_indices : callable (optional, default is `None`)
         Callback on selected indices.
 
     drawer_open : bool (optional, default is `True`)
         If `True`, the CrossFilterMenu sidepanel is initialized
         open.
 
-    set_drawer_open: callable (optional, default is `None)
+    set_drawer_open: callable (optional, default is `None`)
         Callback to open CrossFilterMenu sidepanel.
 
     """
