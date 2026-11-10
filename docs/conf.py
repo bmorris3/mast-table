@@ -59,7 +59,7 @@ extensions = [
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-# templates_path = ['_templates']
+templates_path = ['_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -210,7 +210,7 @@ html_last_updated_fmt = '%b %d, %Y'
 # html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-html_sidebars = {'**': ['globaltoc.html', 'relations.html', 'searchbox.html']}
+html_sidebars = {'**': ['globaltoc.html', 'searchbox.html', 'sidebar-collapse.html']}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
