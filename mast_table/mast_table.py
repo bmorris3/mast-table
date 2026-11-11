@@ -49,8 +49,7 @@ class MastTable:
             A table to load.
 
         **kwargs
-            Keyword arguments are passed to `~mast_table.base.BaseMastTable` and
-            `~mast_table.components.MastTableView`.
+            Keyword arguments are passed to `~mast_table.base.BaseMastTable`.
         """
         _table_widgets.append(self)
 
@@ -107,7 +106,7 @@ class MastTable:
         Parameters
         ----------
         loc : str, optional. Default "inline"
-            Location to display the MastTable. Supported locations include:
+            Location to display the MastTable. Supported locations are:
 
             - "inline": Displays the MastTable inline in a notebook.
             - "sidecar": Displays the MastTable in a separate JupyterLab window from the
