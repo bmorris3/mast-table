@@ -847,9 +847,6 @@ def MastTableView(table, base_mast_table, on_popout_button=None):
                     else table
                 )
 
-                # prevent circular import:
-                from mast_table.mast_table import SelectableTable
-
                 SelectableTable(
                     filtered_table,
                     base_mast_table,

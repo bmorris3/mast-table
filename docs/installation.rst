@@ -3,7 +3,7 @@ Installation
 
 .. note::
 
-    The `mast-table` package is actively maintained, and improvements are made regularly.
+    The ``mast-table`` package is actively maintained, and improvements are made regularly.
     To ensure you have the latest features and bug fixes, we recommend updating to the most 
     recent version. The development version often includes the latest changes ahead of full releases.
 

@@ -37,7 +37,7 @@ intersphinx_mapping = {
     'mast-aladin': ('https://mast-aladin.readthedocs.io/en/latest/', None),
     "solara": ("https://solara.dev/", "https://solara.dev/static/public/objects.inv"),
     "reacton": ("https://reacton.solara.dev/en/latest/", None),
-    # "ipyvuetify": ("http://ipyvuetify.readthedocs.io/en/latest/", None),  # currently broken, fix requested upstream
+    "ipyvuetify": ("http://ipyvuetify.readthedocs.io/en/latest/", None),
     'traitlets': ('https://traitlets.readthedocs.io/en/stable/', None),
 
 }
