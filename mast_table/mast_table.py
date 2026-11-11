@@ -13,7 +13,7 @@ import solara
 import reacton.ipyvuetify as v
 
 from mast_table.base import BaseMastTable, col_unique_row_index
-from mast_table.components.solara import preserve_docstring
+from mast_table.components.filter_widgets import preserve_docstring
 from mast_table.components import (
     Alert, Input, Select, RemoveFilterButton, CrossFilterSlider,
     CrossFilterSelect, FilterModeButtons
