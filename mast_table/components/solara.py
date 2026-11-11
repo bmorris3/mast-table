@@ -51,7 +51,7 @@ def FilterModeButtons(
         The mode to use for filtering. Can be one of `==`, `>=`, `<=`, `>`, `<`.
     set_mode : callable
         Callback for updating filter's mask.
-    dense : bool
+    dense : bool, optional
         Boolean to condense button options.
 
     """
@@ -109,9 +109,9 @@ def SettingsMenu(
         Whether to invert the selection.
     set_invert : callable
         Callback for updating filter's inversion.
-    multiple : bool
+    multiple : bool, optional
         Whether to allow multiple values to be selected.
-    set_multiple : callable
+    set_multiple : callable, optional
         Callback for updating filter's ability to select multiple values.
 
     """
@@ -211,13 +211,13 @@ def CrossFilterSelect(
         The initial values to set as selected. Default is None.
     max_unique : int, optional
         The maximum number of unique values to show in the dropdown. Default is 100.
-    multiple : bool
+    multiple : bool, optional
         Whether to allow multiple values to be selected. Default is False.
-    invert : bool
+    invert : bool, optional
         Whether to invert the selection. Default is False.
-    configurable : bool
+    configurable : bool, optional
         Whether to show the configuration button. Default is True.
-    classes : list
+    classes : list, optional
         Additional CSS classes to add to the main widget.
 
     """
@@ -437,7 +437,7 @@ def CrossFilterSlider(
         The initial value to set for the slider.
     mode : str, optional
         The mode to use for filtering. Can be one of `==`, `>=`, `<=`, `>`, `<`.
-    configurable : bool
+    configurable : bool, optional
         Whether to show a configuration button. Default is True.
 
     """
