@@ -1,479 +1,212 @@
+import functools
 import operator
-from typing import List, Optional, Callable
+import uuid
 import warnings
 
-import functools
-import uuid
+from typing import List, Optional, Callable
 
 from IPython.display import display
+import ipywidgets as widgets
 from ipypopout import PopoutButton
 from sidecar import Sidecar
-import ipywidgets as widgets
-
 import solara
 import reacton.ipyvuetify as v
 
-from astropy.table import Table
 from mast_table.base import BaseMastTable, col_unique_row_index
+from mast_table.components.filter_widgets import preserve_docstring
+from mast_table.components import (
+    Alert, Input, Select, RemoveFilterButton, CrossFilterSlider,
+    CrossFilterSelect, FilterModeButtons
+)
 from mast_table.utils import (
-    operator_map, table_filter_values, table_range,
+    operator_map, table_range,
     slide_or_select, step_size, build_select_items,
     build_select_filter_preview,
 )
-from mast_table.components.cross_filter_select import Select
-from mast_table.components.cross_filter_input import Input
-from mast_table.components.alert import Alert
 
 
 # register loaded table widgets as they're initialized
 _table_widgets = []
 
+__all__ = [
+    'MastTable',
+    'get_current_table',
+    'SelectableTable',
+    'MastTableView',
+]
 
-@solara.component
-def FilterModeButtons(
-    mode,
-    set_mode,
-    dense=False
-):
-    """Comparison operator selector for slider widgets.
 
-    Parameters
-    ----------
-    - `mode`: The astropy Table to filter.
-    - `set_mode`: Callback for updating filter's mask.
-    - `dense`: Boolean to condense button options.
-
+class MastTable:
     """
-    with solara.ToggleButtonsSingle(
-        value=mode,
-        on_value=set_mode,
-        dense=dense
-    ):
-        solara.Button(
-            icon_name="mdi-code-equal",
-            icon=True,
-            value="==",
-        )
-        solara.Button(
-            icon_name="mdi-code-not-equal",
-            icon=True,
-            value="!=",
-        )
-        solara.Button(
-            icon_name="mdi-code-less-than",
-            icon=True,
-            value="<",
-        )
-        solara.Button(
-            icon_name="mdi-code-less-than-or-equal",
-            icon=True,
-            value="<=",
-        )
-        solara.Button(
-            icon_name="mdi-code-greater-than",
-            icon=True,
-            value=">",
-        )
-        solara.Button(
-            icon_name="mdi-code-greater-than-or-equal",
-            icon=True,
-            value=">=",
-        )
-
-
-@solara.component
-def SettingsMenu(
-    invert,
-    set_invert,
-    multiple=None,
-    set_multiple=None
-):
-    """A menu for widgets that manages options for mode, inversion, and multiple.
-
-    Parameters
-    ----------
-    - `invert`: Whether to invert the selection.
-    - `set_invert`: Callback for updating filter's inversion.
-    - `multiple`: Whether to allow multiple values to be selected.
-    - `set_multiple`: Callback for updating filter's ability to select multiple values.
-
+    A selectable table with row filtering.
     """
-    with v.Container(
-        fluid=True,
-        class_="pa-0 ma-0",
-    ):
-        v.Switch(
-            v_model=invert,
-            on_v_model=set_invert,
-            label="Invert filter",
-            hide_details=True,
-            density="compact",
-            color="primary"
-        )
 
-        if multiple is not None:
-            v.Switch(
-                v_model=multiple,
-                on_v_model=set_multiple,
-                label="Select multiple",
-                hide_details=True,
-                density="compact",
-                color="primary"
-            )
-
-
-@solara.component
-def RemoveFilterButton(
-    filter_id: str,
-    on_remove=None,
-):
-    """Button for removal of filter.
-
-    Parameters
-    ----------
-    - `filter_id`: The unique filter instance ID.
-    - `on_remove`: Callback to remove this filter from parent filter list.
-
-    """
-    solara.Button(
-        icon_name="mdi-close",
-        on_click=lambda: on_remove(filter_id),
-        style={"background-color": "light-dark(#00617e, #013b4d)", "color": "white"},
-        classes=["close-button"],
-    )
-    solara.Style(
+    def __init__(self, table, **kwargs):
         """
-        .close-button {
-            min-width: 40px;
-            width: 40px;
-            height: 30px;
-            padding: 0;
-        }
+        Parameters
+        ----------
+        table : `~astropy.table.Table`
+            A table to load.
+
+        **kwargs
+            Keyword arguments are passed to `~mast_table.base.BaseMastTable`.
         """
-    )
+        _table_widgets.append(self)
 
+        self._mast_table_source = table
+        self.widget = BaseMastTable(
+            table,
+            item_key=col_unique_row_index,
+            **kwargs,
+        )
+        self.sidecar = kwargs.get("sidecar", None)
+        self.popout_button = None
 
-@solara.component
-def CrossFilterSelect(
-    table: Table,
-    column: str,
-    filter_id: str,
-    set_mask: Callable,
-    set_filter_mode: Callable,
-    table_filtered: Table,
-    initial_values=None,
-    max_unique: int = 100,
-    multiple: bool = False,
-    invert: bool = False,
-    mode: str = "==",
-    configurable: bool = True,
-    classes: List[str] = [],
-):
-    """A Select widget that will cross filter an astropy Table.
+    def __getattr__(self, name):
+        return getattr(self.widget, name)
 
-    Parameters
-    ----------
-    - `table`: The astropy Table to filter.
-    - `column`: The column to filter on.
-    - `filter_id`: The unique filter instance ID.
-    - `set_mask`: Callback for updating filter's mask.
-    - `initial_values`: The initial values to set as selected.
-    - `max_unique`: The maximum number of unique values to show in the dropdown.
-    - `multiple`: Whether to allow multiple values to be selected.
-    - `invert`: Whether to invert the selection.
-    - `configurable`: Whether to show the configuration button.
-    - `classes`: Additional CSS classes to add to the main widget.
+    @property
+    def selected_rows(self):
+        return self.widget.selected_rows
 
-    """
-    if initial_values is None:
-        initial_values = []
-    elif isinstance(initial_values, str):
-        initial_values = [initial_values]
+    @selected_rows.setter
+    def selected_rows(self, value):
+        if value and isinstance(value[0], dict):
+            value = [item[col_unique_row_index] for item in value]
+        self.widget.selected_rows = value
 
-    filter_values, set_filter_values = solara.use_state(initial_values)
-    solara.use_effect(
-        lambda: set_filter_values(initial_values or []),
-        [initial_values],
-    )
-    invert, set_invert = solara.use_state_or_update(invert)
-    multiple, set_multiple = solara.use_state_or_update(multiple)
+    @property
+    def selected_rows_table(self):
+        return self.table[[int(value) for value in self.widget.selected_rows]]
 
-    def update_mode(new_invert):
-        set_invert(new_invert)
-        set_filter_mode("!=" if new_invert else "==")
+    @property
+    def items(self):
+        return self.widget.items
 
-    def clear_not_multiple():
-        if not multiple and len(filter_values) > 1:
-            set_filter_values([filter_values[0]])
+    @items.setter
+    def items(self, value):
+        self.widget.items = value
 
-    solara.use_effect(
-        clear_not_multiple,
-        [multiple]
-    )
+    def _set_popout_button(self, popout_button):
+        self.popout_button = popout_button
 
-    items, value_counts = build_select_filter_preview(
-        table,
-        column,
-        max_unique=max_unique,
-        table_filtered=table_filtered
-    )
-
-    def set_values_and_filter(values):
-        if values is None:
-            set_filter_values([])
-            return
-
-        if multiple:
-            set_filter_values([value["value"] for value in values])
-        else:
-            set_filter_values([values["value"]])
-
-    def reset():
-        set_filter_values([])
-
-    solara.use_memo(reset, dependencies=[column])
-
-    def update_filter():
-        if hasattr(table[column], 'mask'):
-            unmasked_values_as_strings = (
-                list(table[column].data[~table[column].mask].astype(str)) +
-                ['--']  # masked value
+    def _ipython_display_(self):
+        display(
+            MastTableView(
+                self._mast_table_source,
+                base_mast_table=self.widget,
+                on_popout_button=self._set_popout_button,
             )
-        else:
-            unmasked_values_as_strings = table[column].astype(str)
-        if (
-            len(filter_values) == 0 or
-            (not invert and set(filter_values).issuperset(unmasked_values_as_strings))
-        ):
-            set_mask(filter_id, None)
-            return
+        )
 
-        mask = table_filter_values(table, column, filter_values, invert=invert)
-        set_mask(filter_id, mask)
+    def show(self, loc="inline", title="mast-table", ref=None):
+        """
+        Display MastTable.
 
-    solara.use_memo(update_filter, dependencies=[filter_values, invert])
+        Parameters
+        ----------
+        loc : str, optional. Default "inline"
+            Location to display the MastTable. Supported locations are:
 
-    if multiple:
-        value = [item for item in items if item["value"] in filter_values]
-    else:
-        if filter_values:
-            value = next(
-                (item for item in items if item["value"] == filter_values[0]),
-                None,
-            )
-        else:
-            value = None
+            - "inline": Displays the MastTable inline in a notebook.
+            - "sidecar": Displays the MastTable in a separate JupyterLab window from the
+              notebook, with location decided by 'anchor'. Anchor options available from
+              ``jupyterlab-sidecar`` are: {'split-right', 'split-left', 'split-top',
+              'split-bottom', 'tab-before', 'tab-after', 'right'}.
+              Example ``loc`` for a sidecar at the bottom is ``loc='sidecar:split-bottom'``.
 
-    with solara.VBox(classes=classes) as main:
-        with solara.Column():
-            if len(items) < 5:
-                # set styling for compact checkboxes
-                solara.Style(
-                    """
-                    .compact-checkboxes .v-selection-control {
-                        min-height: 24px;
-                        padding: 0;
-                    }
+            - "popout": Display the MastTable in a detached display. By default, a new
+              window will open (browser popup permissions required). Anchor options are
+              ``popout:window`` (default, opens MastTable in a new, detached popout) or
+              ``popout:tab`` (opens MastTable in a new, detached tab in your browser).
 
-                    .compact-checkboxes .v-selection-control__wrapper {
-                        height: 24px;
-                    }
+        title : str, optional. Default "mast-table"
+            The title of the sidecar tab, only applicable to a "sidecar" display.
 
-                    .compact-checkboxes .v-label {
-                        margin: 0;
-                    }
-                    """
-                )
+        ref : sidecar.Sidecar [1]_ or app, optional. Default None.
+            An existing reference sidecar or app with ``.sidecar`` attribute. Opens the new sidecar
+            display with its anchor defined relative to the ref sidecar. Only applicable to a
+            "sidecar" display.
 
-                with v.Container(
-                    fluid=True,
-                    class_="pa-0 ma-0 compact-checkboxes",
-                ):
-                    for opt in items:
-                        checked = opt["value"] in filter_values
+        References
+        ----------
+        .. [1] `JupyterLab Sidecar
+               <https://github.com/jupyter-widgets/jupyterlab-sidecar#sidecar>`_
+        """
+        valid_anchors = [
+            "split-right", "split-left", "split-top", "split-bottom",
+            "tab-before", "tab-after", "right", None
+        ]
 
-                        def toggle_value(checked, value=opt["value"]):
-                            if checked:
-                                set_filter_values(filter_values + [value])
-                            else:
-                                set_filter_values(
-                                    [v for v in filter_values if v != value]
-                                )
+        if type(loc) is not str:
+            raise TypeError("Invalid loc type provided. Must be a string.")
 
-                        v.Checkbox(
-                            v_model=checked,
-                            on_v_model=toggle_value,
-                            label=opt["text"],
-                            density="compact",
-                            hide_details=True,
-                        )
+        if loc == "inline":
+            self._ipython_display_()
+        elif loc.startswith("sidecar"):
+            anchor = None if loc == "sidecar" else loc.split(":")[-1]
 
-                    with solara.Row(
-                        style={
-                            "align-items": "center",
-                            "justify-content": "space-between",
-                            "width": "100%",
-                            "padding": 0,
-                        }
-                    ):
-                        solara.Button(
-                            "Select All",
-                            on_click=lambda: set_filter_values(
-                                [item["value"] for item in items]
-                            ),
-                            text=True,
-                            style={
-                                "background-color": "light-dark(#00617e, #013b4d)",
-                                "color": "white"
-                            }
-                        )
+            if anchor not in valid_anchors:
+                raise ValueError(
+                    "Invalid anchor provided. Must be one of the available from "
+                    "``jupyterlab-sidecar``. Valid anchors are: "
+                    f"{valid_anchors[:-1]}")
 
-                        solara.Button(
-                            "Clear All",
-                            on_click=lambda: set_filter_values([]),
-                            text=True,
-                            style={
-                                "background-color": "light-dark(#00617e, #013b4d)",
-                                "color": "white"
-                            }
-                        )
-
-            else:
-                # creating selection dropdown
-                Select.element(
-                    value=value,
-                    items=items,
-                    on_value=set_values_and_filter,
-                    label="",
-                    clearable=False,
-                    return_object=True,
-                    multiple=multiple,
-                    filtered=len(filter_values) > 0,
-                    count=len(table_filtered),
-                    messages=(
-                        f"Too many unique values, will only show the first {max_unique}"
-                        if len(value_counts) > max_unique else ""
-                    ),
-                )
-
-                # creating settings menu
-                if configurable:
-                    SettingsMenu(
-                        invert,
-                        update_mode,
-                        multiple=multiple,
-                        set_multiple=set_multiple
+            if ref and not isinstance(ref, Sidecar):
+                try:
+                    ref = ref.sidecar
+                except AttributeError:
+                    raise ValueError(
+                        "Invalid ref provided. Must be a `Sidecar` instance or an "
+                        "app with `.sidecar` attribute."
                     )
 
-    return main
+                if ref is None or not isinstance(ref, Sidecar):
+                    raise ValueError(
+                        "Invalid ref provided. App must have an initialized `.sidecar` "
+                        "attribute."
+                    )
 
+            sc = Sidecar(title=title, anchor=anchor, ref=ref)
+            with sc:
+                self._ipython_display_()
+            self.sidecar = sc
 
-@solara.component
-def CrossFilterSlider(
-    table,
-    column: str,
-    filter_id: str,
-    set_mask: Callable,
-    set_filter_mode: Callable,
-    initial_value=None,
-    mode: str = ">=",
-    configurable: bool = True,
-):
-    """A Slider widget that will cross filter an astropy Table.
+        elif loc.startswith("popout"):
+            if self.popout_button is None:
+                self._hidden_output = widgets.Output()
+                self._hidden_output.layout.display = "none"
 
-    See [use_cross_filter](/documentation/api/hooks/use_cross_filter)
-    for more information about how to use cross filtering.
+                with self._hidden_output:
+                    self._ipython_display_()
 
-    Parameters
-    ----------
-    - `table`: The astropy Table to filter.
-    - `column`: The column to filter on.
-    - `filter_id`: The unique filter instance ID.
-    - `set_mask`: Callback for updating filter's mask.
-    - `set_filter_mode`: Callback for updating filter's mode.
-    - `initial_value`: The initial value to set for the slider.
-    - `mode`: The mode to use for filtering. Can be one of `==`, `>=`, `<=`, `>`, `<`.
-    - `configurable`: Whether to show a configuration button.
-
-    """
-    filter_value, set_filter_value = solara.use_state(initial_value)
-    solara.use_effect(
-        lambda: set_filter_value(initial_value),
-        [initial_value],
-    )
-    mode, set_mode = solara.use_state_or_update(mode)
-
-    def update_mode(new_mode):
-        set_mode(new_mode)
-        set_filter_mode(new_mode)
-
-    vmin, vmax = table_range(table, column)
-
-    def reset():
-        if initial_value is not None:
-            set_filter_value(initial_value)
+            anchor = None if loc == "popout" else loc.split(":")[-1]
+            if anchor in (None, "window"):
+                self.popout_button.open_window()
+            elif anchor == "tab":
+                self.popout_button.open_tab()
+            else:
+                raise ValueError(
+                    "Invalid anchor provided. Must be 'window' or 'tab'."
+                )
         else:
-            set_filter_value(vmin)
+            raise ValueError("Invalid loc provided. Must be 'inline', 'sidecar', or 'popout'.")
 
-    solara.use_memo(reset, dependencies=[column])
 
-    def update_filter():
-        filter = None
-        if filter_value:
-            filter = operator_map[mode](table[column], filter_value)
-        set_mask(filter_id, filter)
-
-    solara.use_memo(update_filter, dependencies=[filter_value, mode])
-
-    with solara.VBox() as main:
-        solara.Style(
-            """
-            .crossfilter-slider .v-slider {
-                transform: translateY(10px);
-            }
-            """
+def get_current_table():
+    """
+    Return the last instantiated table widget, warns user
+    if none exist.
+    """
+    if _table_widgets:
+        return _table_widgets[-1]
+    else:
+        warnings.warn(
+            "No `MastTable` exists.", UserWarning
         )
 
-        slider_args = {
-            "label": "",
-            "min": vmin,
-            "max": vmax,
-            "step": step_size(vmin, vmax),
-            "thumb_label": False,
-            "tick_labels": False,
-            "color": "primary",
-        }
 
-        # creating slider
-        with solara.Row(
-            style={"alignItems": "center"},
-            classes=["crossfilter-slider"]
-        ):
-            Input.element(
-                value=filter_value,
-                min=vmin,
-                max=vmax,
-                step=step_size(vmin, vmax),
-                on_value=set_filter_value,
-            )
-
-            v.Slider(
-                v_model=filter_value,
-                on_v_model=set_filter_value,
-                **slider_args
-            )
-
-        # creating settings menu
-        if configurable:
-            FilterModeButtons(
-                mode=mode,
-                set_mode=update_mode,
-                dense=True,
-            )
-
-    return main
-
-
+@preserve_docstring
 @solara.component
 def SelectableTable(
     table,
@@ -482,7 +215,7 @@ def SelectableTable(
     drawer_open: bool = False,
     set_drawer_open=None
 ):
-    """An ipyvuetify DataTable with checkbox selection.
+    """An `ipyvuetify.DataTable` with checkbox selection.
 
     Displays a paginated table with selectable rows.  Reports the
     indices (into *table*) of the currently selected rows.
@@ -492,17 +225,17 @@ def SelectableTable(
     table : `~astropy.table.Table`
         A table to load.
 
-    base_mast_table : `BaseMastTable`
+    base_mast_table : `~mast_table.base.BaseMastTable`
         BaseMastTable widget to display.
 
-    on_selected_indices : callable (optional, default is `None)
+    on_selected_indices : callable (optional, default is `None`)
         Callback on selected indices.
 
     drawer_open : bool (optional, default is `True`)
         If `True`, the CrossFilterMenu sidepanel is initialized
         open.
 
-    set_drawer_open: callable (optional, default is `None)
+    set_drawer_open: callable (optional, default is `None`)
         Callback to open CrossFilterMenu sidepanel.
 
     """
@@ -550,26 +283,22 @@ def SelectableTable(
     display(base_mast_table)
 
 
+@preserve_docstring
 @solara.component
 def MastTableView(table, base_mast_table, on_popout_button=None):
-    """Displays selectable table that participates in cross-filtering.
-
-    * Incoming cross-filters from other components narrow which rows
-      are shown.
-    * When the user checks rows, a filter is set so that *other*
-      cross-filter consumers only see the selected rows.
-    * Filters are set and tracked in a popout window.
+    """
+    Displays selectable table with cross-filtering.
 
     Parameters
     ----------
     table : `~astropy.table.Table`
         A table to load.
 
-    base_mast_table : `BaseMastTable`
+    base_mast_table : `~mast_table.base.BaseMastTable`
         BaseMastTable widget to display.
 
-    on_popout_button: callable (optional, default is `None`)
-        Callback to expose popout button.
+    on_popout_button: callable, optional
+        Callback to expose popout button. Default is None.
 
     """
     solara.provide_cross_filter()
@@ -1117,6 +846,7 @@ def MastTableView(table, base_mast_table, on_popout_button=None):
                     if combined_mask is not None
                     else table
                 )
+
                 SelectableTable(
                     filtered_table,
                     base_mast_table,
@@ -1181,178 +911,3 @@ def MastTableView(table, base_mast_table, on_popout_button=None):
             on_popout_button(popout_button)
 
     solara.use_effect(set_popout)
-
-
-class MastTable:
-    """
-    A selectable table that participates in cross-filtering.
-
-    Parameters
-    ----------
-    table : `~astropy.table.Table`
-        A table to load.
-
-    **kwargs
-        Keyword arguments are passed to BaseMastTable.
-
-    """
-
-    def __init__(self, table, **kwargs):
-        """
-        Parameters
-        ----------
-        table : `~astropy.table.Table`
-            A table to load.
-
-        **kwargs
-            Keyword arguments are passed to BaseMastTable and
-            MastTableView.
-        """
-        _table_widgets.append(self)
-
-        self._mast_table_source = table
-        self.widget = BaseMastTable(
-            table,
-            item_key=col_unique_row_index,
-            **kwargs,
-        )
-        self.sidecar = kwargs.get("sidecar", None)
-        self.popout_button = None
-
-    def __getattr__(self, name):
-        return getattr(self.widget, name)
-
-    @property
-    def selected_rows(self):
-        return self.widget.selected_rows
-
-    @selected_rows.setter
-    def selected_rows(self, value):
-        if value and isinstance(value[0], dict):
-            value = [item[col_unique_row_index] for item in value]
-        self.widget.selected_rows = value
-
-    @property
-    def selected_rows_table(self):
-        return self.table[[int(value) for value in self.widget.selected_rows]]
-
-    @property
-    def items(self):
-        return self.widget.items
-
-    @items.setter
-    def items(self, value):
-        self.widget.items = value
-
-    def _set_popout_button(self, popout_button):
-        self.popout_button = popout_button
-
-    def _ipython_display_(self):
-        display(
-            MastTableView(
-                self._mast_table_source,
-                base_mast_table=self.widget,
-                on_popout_button=self._set_popout_button,
-            )
-        )
-
-    def show(self, loc="inline", title="mast-table", ref=None):
-        """
-        Display the MastTable.
-
-        Parameters
-        ----------
-        loc : str, optional (default "inline")
-            Location to display the MastTable. Supported locations:
-                "inline": Displays the MastTable inline in a notebook.
-                "sidecar": Displays the MastTable in a separate JupyterLab window from the
-                    notebook, with location decided by 'anchor'. Anchor options available from
-                    ``jupyterlab-sidecar`` are:
-                        {'split-right', 'split-left', 'split-top', 'split-bottom', 'tab-before',
-                         'tab-after', 'right'}
-                    Example loc for a sidecar at the bottom is ``loc='sidecar:split-bottom'``.
-                "popout": Display the MastTable in a detached display. By default, a new
-                    window will open (browser popup permissions required). Anchor options are:
-                        * ``popout:window`` (default, opens MastTable in a new, detached popout)
-                        * ``popout:tab`` (opens MastTable in a new, detached tab in your browser)
-
-        title : str, optional (default "MastTable")
-            The title of the sidecar tab, only applicable to a "sidecar" display.
-
-        ref: Sidecar | app, optional (default None)
-            An existing reference sidecar or app with `.sidecar` attribute. Opens the new sidecar
-            display with its anchor defined relative to the ref sidecar. Only applicable to a
-            "sidecar" display.
-
-        """
-        valid_anchors = [
-            "split-right", "split-left", "split-top", "split-bottom",
-            "tab-before", "tab-after", "right", None
-        ]
-
-        if type(loc) is not str:
-            raise TypeError("Invalid loc type provided. Must be a string.")
-
-        if loc == "inline":
-            self._ipython_display_()
-        elif loc.startswith("sidecar"):
-            anchor = None if loc == "sidecar" else loc.split(":")[-1]
-
-            if anchor not in valid_anchors:
-                raise ValueError(
-                    "Invalid anchor provided. Must be one of the available from "
-                    "``jupyterlab-sidecar``. Valid anchors are: "
-                    f"{valid_anchors[:-1]}")
-
-            if ref and not isinstance(ref, Sidecar):
-                try:
-                    ref = ref.sidecar
-                except AttributeError:
-                    raise ValueError(
-                        "Invalid ref provided. Must be a `Sidecar` instance or an "
-                        "app with `.sidecar` attribute."
-                    )
-
-                if ref is None or not isinstance(ref, Sidecar):
-                    raise ValueError(
-                        "Invalid ref provided. App must have an initialized `.sidecar` "
-                        "attribute."
-                    )
-
-            sc = Sidecar(title=title, anchor=anchor, ref=ref)
-            with sc:
-                self._ipython_display_()
-            self.sidecar = sc
-
-        elif loc.startswith("popout"):
-            if self.popout_button is None:
-                self._hidden_output = widgets.Output()
-                self._hidden_output.layout.display = "none"
-
-                with self._hidden_output:
-                    self._ipython_display_()
-
-            anchor = None if loc == "popout" else loc.split(":")[-1]
-            if anchor in (None, "window"):
-                self.popout_button.open_window()
-            elif anchor == "tab":
-                self.popout_button.open_tab()
-            else:
-                raise ValueError(
-                    "Invalid anchor provided. Must be 'window' or 'tab'."
-                )
-        else:
-            raise ValueError("Invalid loc provided. Must be 'inline', 'sidecar', or 'popout'.")
-
-
-def get_current_table():
-    """
-    Return the last instantiated table widget, warns user
-    if none exist.
-    """
-    if _table_widgets:
-        return _table_widgets[-1]
-    else:
-        warnings.warn(
-            "No `MastTable` exists.", UserWarning
-        )

@@ -1,16 +1,16 @@
-User Installation
------------------
+Installation
+============
 
 .. note::
 
-    The `mast-table` package is actively maintained, and improvements are made regularly.
+    The ``mast-table`` package is actively maintained, and improvements are made regularly.
     To ensure you have the latest features and bug fixes, we recommend updating to the most 
     recent version. The development version often includes the latest changes ahead of full releases.
 
 
 Set Up Your Local Environment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-To use mast-table, you need `Python 3.12` or later. Below is an example using `Python 3.12`, but you can
+To use mast-table, you need Python 3.12 or later. Below is an example using Python 3.12, but you can
 replace 3.12 with any supported version.
 
 1. **Create a new Conda environment:**
