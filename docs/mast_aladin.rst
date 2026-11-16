@@ -69,7 +69,7 @@ As we did in :doc:`getting_started`, let's use astroquery to retrieve an observa
 Observation query results from `~astroquery.mast.missions.MastMissionsClass`
 are returned as an `astropy.table.Table`.  Notice that the ``observations``
 table has a column called ``s_regions``. The values are 
-`STC-S region <https://ivoa.net/documents/STC-S/>`_ strings which describe the
+`STC-S region <https://ivoa.net/documents/STC-S/>`_ strings that describe the
 observation footprint.
 
 .. code-block:: python
