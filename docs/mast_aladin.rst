@@ -133,14 +133,15 @@ The widget visualizes the sky with imaging from STScI's
 Widget arrangement
 ------------------
 
-By default, ``mast-table`` is shown in the output beneath the code cell, and ``mast-aladin`` is
-opened in a |sidecar| to the right of the notebook. You can click and drag the ``mast-aladin``
-tab label to rearrange your workspace.
+By default, ``mast-table``'s `~mast_table.mast_table.MastTable.show` method displays the
+widget beneath the code cell, and ``mast-aladin``'s `~mast_aladin.app.MastAladin.show` method
+displays the widget in a |sidecar| to the right of the notebook. You can click and drag the
+``mast-aladin`` tab label to rearrange your workspace.
 
 We can also configure the placement of the widgets by adding arguments to 
 `~mast_table.mast_table.MastTable.show`. In this example, we open both widgets
-in their own sidecars splitting the workspace beneath the notebook, with ``mast-table`` on the left
-and ``mast-aladin`` on the right:
+in their own sidecars splitting the workspace beneath the notebook, with ``mast-table``
+on the left and ``mast-aladin`` on the right:
 
 
 .. code-block:: python
@@ -157,8 +158,8 @@ and ``mast-aladin`` on the right:
     :align: center
     :class: outlined
 
-motorcycle: extra arrangement help
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Presets from motorcycle
+^^^^^^^^^^^^^^^^^^^^^^^
 
 If you have several tabs or sidecars open, it might take a few clicks and drags to reorganize your Jupyter
 Lab workspace. To save you clicks, we developed |motorcycle| -- a Jupyter Lab extension
