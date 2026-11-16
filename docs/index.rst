@@ -36,6 +36,7 @@ Contents
    getting_started
    catalogs
    mast_aladin
+   custom_filters
    api
 
 
