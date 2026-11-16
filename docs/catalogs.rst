@@ -62,7 +62,7 @@ check the unit of the ``parallax`` column:
     >>> gaia_catalog['parallax'].unit
     mas
 
-Add a filter to see only sources with parallax > 0.1 mas.
+Add a filter to see only sources with parallax > 0.1 mas. After clicking 'Apply Filter', the `filter_mask` attribute of `mast-table` will be updated accordingly.
 
 .. image:: https://github.com/spacetelescope/widget-docs/blob/main/mast-table/catalog-filter.jpg?raw=true
     :width: 100%
