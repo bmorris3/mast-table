@@ -160,7 +160,7 @@ and ``mast-aladin`` on the right:
 motorcycle: extra arrangement help
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you have several tabs open, sometimes it might takes a few clicks and drags to reorganize your Jupyter
+If you have several tabs or sidecars open, it might take a few clicks and drags to reorganize your Jupyter
 Lab workspace. To save you clicks, we developed |motorcycle| -- a Jupyter Lab extension
 that drives around your sidecars. ``motorcycle`` comes pre-installed on the |rrn|, and you can
 install it locally with::
