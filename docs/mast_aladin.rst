@@ -139,7 +139,7 @@ tab label to rearrange your workspace.
 
 We can also configure the placement of the widgets by adding arguments to 
 `~mast_table.mast_table.MastTable.show`. In this example, we open both widgets
-in their own sidecars beneath the notebook, with ``mast-table`` on the left
+in their own sidecars splitting the workspace beneath the notebook, with ``mast-table`` on the left
 and ``mast-aladin`` on the right:
 
 
