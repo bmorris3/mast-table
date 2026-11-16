@@ -43,7 +43,7 @@ an Aladin widget:
 
 |jwst_search_result|
 
-``mast-table`` and ``mast-aladin`` have been designed to produce a similar interactive environment 
+``mast-table`` and ``mast-aladin`` are designed to produce a similar interactive environment 
 **in Jupyter Lab**.
 
 Observation query
