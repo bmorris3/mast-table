@@ -90,7 +90,7 @@ Let's initialize a `~mast_table.mast_table.MastTable` widget with the query resu
 Launch mast-aladin
 ------------------
 
-Let's initialize a `~mast_aladin.app.MastAladin` widget. We will center on
+Now, we'll initialize a `~mast_aladin.app.MastAladin` widget. We will center on
 the query coordinate by setting ``target``, and we'll set  the field of view or
 "zoom level" with ``fov``.
 
