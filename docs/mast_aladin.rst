@@ -110,8 +110,7 @@ We load the observation table into ``mast-aladin`` with
     overlay = mast_aladin.add_table(observations)
 
 Now we call the ``show`` methods on `~mast_aladin.app.MastAladin` and 
-`~mast_table.mast_table.MastTable` to display these results in a 
-Jupyter Lab environment, like the |rrn|.
+`~mast_table.mast_table.MastTable` to display these results.
 
 .. code-block:: python
 
