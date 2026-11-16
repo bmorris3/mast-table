@@ -31,6 +31,7 @@ Contents
 
    installation
    getting_started
+   catalogs
    api
 
 
