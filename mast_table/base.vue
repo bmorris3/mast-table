@@ -103,7 +103,7 @@
             @click="open_selected_rows_in_jdaviz"
             ><v-icon>mdi-open-in-app</v-icon>jdaviz</v-btn>
           </template>
-          <div style="text-align: center;">Download, open selected products in<br />jdaviz.If not visible, call:<br />import jdaviz; jdaviz.show()</div>
+          <div style="text-align: center;">Download, open selected products in<br />jdaviz. If not visible, call:<br />import jdaviz; jdaviz.show()</div>
         </v-tooltip>
       </div>
     </div>
