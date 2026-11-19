@@ -12,7 +12,6 @@ at `Space Telescope Science Institute <https://www.stsci.edu>`_.
 The source code is available on `GitHub <https://github.com/spacetelescope/mast-table>`_.
 
 
-
 Key Features
 ************
 
@@ -25,6 +24,23 @@ Key Features
 * **Filter down** long query results to the results you need
 
 
+Demo
+----
+
+Watch as we:
+
+1. Query MAST for JWST observations in a notebook
+2. Display observations with ``mast-table``
+3. Select an observation, query for its data products
+4. Display data products with ``mast-table``
+5. Display observation footprints with `mast-aladin <https://mast-aladin.readthedocs.io/>`_
+
+.. raw:: html
+
+   <video autoplay muted loop playsinline width="100%">
+     <source src="https://stsci.box.com/shared/static/21ftadpbexlkobkc18pdobrwh7ql88c2.mp4" type="video/mp4">
+     Your browser does not support the video tag.
+   </video>
 
 Contents
 ********
