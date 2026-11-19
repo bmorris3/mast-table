@@ -1,5 +1,5 @@
-Custom Filters
-==============
+Advanced Filtering
+==================
 
 Suppose you are browsing a source catalog with ``mast-table``.  In :ref:`getting-started`, we
 used the ``mast-table`` :ref:`getting-started-filters` interface 
