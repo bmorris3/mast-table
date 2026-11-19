@@ -29,11 +29,10 @@ Demo
 
 Watch as we:
 
-1. Query MAST for JWST observations in a notebook
-2. Display observations with ``mast-table``
-3. Select an observation, query for its data products
-4. Display data products with ``mast-table``
-5. Display observation footprints with `mast-aladin <https://mast-aladin.readthedocs.io/>`_
+1. Query MAST for JWST observations
+2. Display observations, select one
+3. Query data products from selected observation, display in ``mast-table``
+4. Display observation footprints in `mast-aladin <https://mast-aladin.readthedocs.io/>`_
 
 .. raw:: html
 
