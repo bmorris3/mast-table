@@ -64,9 +64,9 @@ parameters to compute the absolute magnitude:
 
     absolute_mag = apparent_mag - 5 * np.log10(distance / (10 * u.pc)) * u.mag
 
-We mask absolute magnitudes with NaNs, and add a masked column to the catalog table with the
+We mask absolute magnitudes with NaNs and add a masked column to the catalog table with the
 absolute magnitudes. We reorder the columns so that absolute magnitude appears
-first, and display the result with `~mast_table.mast_table.MastTable`:
+first, and then we display the result with `~mast_table.mast_table.MastTable`:
 
 .. code-block:: python
 
@@ -88,21 +88,21 @@ first, and display the result with `~mast_table.mast_table.MastTable`:
     mast_table.show()
 
 We can now construct a filter to view sources with absolute G magnitudes
-fainter than 9.5 like so,
+fainter than 9.5 like so:
 
 .. image:: https://github.com/spacetelescope/widget-docs/blob/main/mast-table/custom_filters/absolute-mag.jpg?raw=true
     :width: 100%
     :align: center
     :class: outlined
 
-then click apply filter.
+Then, we click apply filter.
 
 Complex filters
 ---------------
 
-The Filters widget UI becomes cumbersome for combinations of many filter criteria.
+The Filters widget UI can become cumbersome for combinations of many filter criteria.
 In those cases, we suggest using the Python API in the Jupyter notebook to index
-the `astropy.table.Table` directly, before you construct the `~mast_table.mast_table.MastTable`.
+the `astropy.table.Table` directly before constructing the `~mast_table.mast_table.MastTable`.
 For example, the code below displays a `~mast_table.mast_table.MastTable` widget
 containing sources that meet the following criteria:
 
