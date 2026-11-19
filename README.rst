@@ -1,43 +1,29 @@
-.. image:: https://codecov.io/gh/spacetelescope/mast-table/branch/main/graph/badge.svg
-    :target: https://codecov.io/gh/spacetelescope/mast-table
 
-mast-table
-===========
+.. |logo| image:: docs/assets/mast-table-logo.svg
+    :alt: mast-table
+    :height: 180px
 
-.. warning::
+|logo|
 
-    mast-table is currently in development and breaking changes may occur without warning.
+``mast-table`` is an interactive table widget for Jupyter notebooks for browsing
+query results from the `Mikulski Archive for Space Telescopes (MAST) <https://mast.stsci.edu>`_
+at `Space Telescope Science Institute <https://www.stsci.edu>`_. 
 
-Installing
-----------
 
-Installing ``mast-table`` in a new virtual or conda environment will help you to avoid 
-version conflicts with other packages you may have installed, for example:
+Key Features
+************
 
-.. code-block:: bash
+* **Runs on the** `Roman Research Nexus <https://roman.science.stsci.edu/hub/login?next=%2Fhub%2F>`_,
+  or on your local machine in a Jupyter notebook
+* **Browse MAST query results** for observations or sources in catalogs with a user interface 
+  with a similar look and feel to the MAST `Mission Search <https://mast.stsci.edu/search>`_ query
+  result page
+* **Open footprints and data products** in `mast-aladin <https://mast-aladin.readthedocs.io/>`_ 
+  and `jdaviz <https://jdaviz.readthedocs.io/en/stable/>`_
+* **Filter down** long query results to the results you need
 
-   conda create -n mast-table-env python=3.12
-   conda activate mast-table-env
+Documentation
+*************
 
-You can install the latest stable release version of ``mast-table`` using pip:
-
-.. code-block:: bash
-
-   pip install mast-table --upgrade
-
-Or, you can install the latest development version of ``mast-table`` using pip:
-
-.. code-block:: bash
-
-   pip install git+https://github.com/spacetelescope/mast-table --upgrade
-
-Help
-----------
-
-If you encounter any unreported bugs or issues, please `open a GitHub issue <https://github.com/spacetelescope/mast-table/issues/new/choose>`_
-
-License
----------------------
-
-This project is Copyright (c) Space Telescope Science Institute and licensed under
-the terms of the BSD 3-Clause license.
+`Click here to see the full documentation for mast-table 
+on Read The Docs <https://mast-table.readthedocs.io/latest/>`_.
