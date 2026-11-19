@@ -37,7 +37,7 @@ Watch as we:
 
 .. raw:: html
 
-   <video autoplay muted loop playsinline width="100%">
+   <video autoplay muted loop playsinline controls width="100%">
      <source src="https://stsci.box.com/shared/static/21ftadpbexlkobkc18pdobrwh7ql88c2.mp4" type="video/mp4">
      Your browser does not support the video tag.
    </video>
