@@ -43,8 +43,8 @@ Gaia DR3 source catalog can be found in the MAST
 Filter on derived parameters
 ----------------------------
 
-Suppose we need to filter the table on the source's absolute magnitude in G, which is not
-available in the Gaia DR3 catalog columns. Howevere, Gaia DR3 catalog results contain columns
+Suppose we need to filter the table on the sources' _absolute_ magnitude in G, which is not
+available in the Gaia DR3 catalog columns. However, Gaia DR3 catalog results contain columns
 for ``'parallax'`` and the G band apparent magnitude ``'phot_g_mean_mag'``. We will use these
 parameters to compute the absolute magnitude:
 
@@ -64,8 +64,7 @@ parameters to compute the absolute magnitude:
 
     absolute_mag = apparent_mag - 5 * np.log10(distance / (10 * u.pc)) * u.mag
 
-We mask absolute magnitudes with NaNs and add a masked column to the catalog table with the
-absolute magnitudes. We reorder the columns so that absolute magnitude appears
+We add a masked column of absolute magnitudes to the catalog table, masking magnitudes containing NaNs. We reorder the columns so that absolute magnitude appears
 first, and then we display the result with `~mast_table.mast_table.MastTable`:
 
 .. code-block:: python
@@ -95,7 +94,7 @@ fainter than 9.5 like so:
     :align: center
     :class: outlined
 
-Then, we click apply filter.
+Then, we click Apply Filter.
 
 Complex filters
 ---------------
