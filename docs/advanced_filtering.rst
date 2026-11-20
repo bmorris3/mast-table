@@ -43,7 +43,7 @@ Gaia DR3 source catalog can be found in the MAST
 Filter on derived parameters
 ----------------------------
 
-Let's filter the table on each source's _absolute_ magnitude in G, which is not
+Let's filter the table on each source's *absolute* magnitude in G, which is not
 available in the Gaia DR3 catalog columns. However, Gaia DR3 catalog results contain columns
 for ``'parallax'`` and the G band apparent magnitude ``'phot_g_mean_mag'``. We will use these
 parameters to compute the absolute magnitude:
