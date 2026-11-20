@@ -46,12 +46,13 @@ Contents
 ********
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    installation
    getting_started
    catalogs
    mast_aladin
+   advanced_filtering
    api
 
 

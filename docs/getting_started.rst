@@ -10,6 +10,9 @@
    target="_blank">Follow this link to see results for the above query</a>
 
 
+
+.. _getting-started:
+
 Getting started
 ===============
 
@@ -113,6 +116,7 @@ Click the checkboxes on the left of a row to select an observation:
 
 |
 
+.. _getting-started-filters:
 
 Filters
 -------
