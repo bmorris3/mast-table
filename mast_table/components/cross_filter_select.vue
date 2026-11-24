@@ -32,11 +32,17 @@
   </v-autocomplete>
 </template>
 
-<style>
+<style scoped>
+
 .cross-filter-selection {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.v-list-item__content {
+  display: block !important;
+}
+
 </style>
