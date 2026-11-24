@@ -41,6 +41,7 @@
   white-space: nowrap;
 }
 
+/* block jdaviz css leak */
 .cross-filter-menu .v-list-item__content {
   display: block !important;
 }
